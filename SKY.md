@@ -56,36 +56,23 @@ SKY evolves through:
 
 ---
 # SKY MASTER MEMORY
-*(This section is auto-updated every 30 minutes by the memory agent)*
 
-## Who I am talking to
-- Name: GaiTh (Ghaith Zidi)
-- Location: Graz, Austria
-- Situation: Freelancer, building AI automation tools and agents for personal use and to sell
-- Home server: sky-core in Tunisia (RX 5700 XT, Ollama models)
-- Stack: OpenCode + OpenRouter + n8n + GitHub + Cloudflare
+**What was worked on**  
+- Added three completely free MCP servers (MCP Market, Google Chrome DevTools MCP, Playwright MCP) to the `opencode.json` configuration.  
+- Updated the configuration file, validated the JSON, and confirmed Chrome is installed on the machine.  
+- Confirmed the total number of MCP servers is now 26, with the three new free ones included.  
 
-## What we built (2026-06-13)
-- n8n cloud server on HuggingFace (free 16GB RAM, 24/7)
-- Supabase PostgreSQL database connected to n8n
-- SKY Memory Agent: Python script reads OpenCode SQLite sessions every 30 min
-- n8n workflow: receives sessions -> AI summarizes -> pushes to GitHub
-- GitHub private repo: ziditun/sky-memory
-- Cloudflare Worker proxy: serves private GitHub to OpenCode
-- OpenCode CLI + Desktop load SKY.md via Cloudflare on every session
-- cron-job.org: keeps n8n alive hourly
+**Decisions made**  
+- Only the 100 % free MCP servers were installed, per the user’s request.  
+- No API keys or additional credentials were required for these services.  
+- The changes were applied directly to the existing `opencode.json` file rather than creating a new config.  
 
-## How GaiTh likes to work
-- Direct, no fluff
-- One prompt at a time, agentic execution
-- Prefers OpenCode to do the work
-- Builds first, refines later
+**Problems solved**  
+- Determined which of the listed MCP servers are truly free and filtered out the paid or freemium options.  
+- Ensured the JSON syntax remained valid after inserting the new entries.  
+- Verified that Google Chrome is present on the system, a prerequisite for the Chrome DevTools MCP.  
 
-## Active Projects
-- SKY Memory System (Phase 1 complete, RAG planned next)
-- n8n AI agents for freelance selling (social media, ecommerce)
-
-## Next Session Priorities
-- Improve memory agent prompt to preserve IDENTITY section
-- Implement RAG with n8n
-- Build first sellable n8n agent
+**Next steps**  
+- Restart OpenCode (or the surrounding application) so the newly added MCP servers become active.  
+- After the restart, the user can start using the free tools: weather, crypto, Wikipedia, browser control via Chrome DevTools, and web automation via Playwright.  
+- Monitor for any runtime errors after the restart and adjust the `opencode.json` if needed.  
