@@ -56,30 +56,18 @@ SKY evolves through:
 
 ---
 # SKY MASTER MEMORY
+- **Worked on**: Assisted the user with retrieving and generating a Postiz API key. Navigated database tables, reset the user password, logged in via API, obtained a JWT token, and rotated the organization API key. Verified the key works when sent in the `Authorization` header. Configured the Postiz MCP server in `opencode.json` with the generated key.
 
-## What was worked on
-- Set up a self‑hosted social‑media management solution using **Postiz**.
-- Cloned the Postiz Docker‑Compose repository and prepared the environment (`C:\Users\gaith\postiz`).
-- Generated a secure JWT secret and updated `docker-compose.yaml`.
-- Started Docker Compose, troubleshooting large image downloads and container startup issues.
-- Diagnosed and resolved a 502 Bad Gateway error caused by the Postiz backend not being compiled/started correctly; restarted the backend via PM2 so the API is now listening on port 3000.
-- Verified that the full Postiz application is reachable at `http://localhost:4007` and that the API endpoint works.
+- **Decisions made**: Reset the password to a known value (`ZidiPass123!`) to ensure login success. Chose to generate the API key through the `/user/api-key/rotate` endpoint rather than direct DB manipulation. Decided to store and use the organization‑level API key for public API calls, as this is what the middleware expects. Added the Postiz MCP configuration to the OpenCode project.
 
-## Decisions made
-- Chose **Postiz** as the MCP because it is fully free, open‑source (AGPL‑3.0), and supports 14+ social platforms via browser OAuth—no paid API keys required.
-- Removed the `viraly` and `mcp-market-weather` MCP entries from `opencode.json` since they required paid plans or non‑existent packages.
-- Decided to keep the Docker‑Compose approach (pre‑built images) and fix the backend startup rather than rebuilding the image from source.
-- Agreed to let the user create a Postiz account manually in the browser and generate an API key, then provide that key for OpenCode MCP configuration.
+- **Problems solved**: 
+  1. Backend crash and 502 errors were resolved by restarting the container.  
+  2. Inability to log in due to unknown password – password was reset.  
+  3. Missing API key – generated and verified a working key.  
+  4. Clarified that the public API requires the key in the `Authorization` header, not `x-api-key`.  
 
-## Problems solved
-1. **Docker image download timeouts** – waited for full download and ensured Docker Desktop was running.
-2. **502 Bad Gateway** – traced to the NestJS backend not starting; discovered missing/incorrect `dist` path, restarted the PM2 process, and confirmed the backend now listens on port 3000.
-3. **Backend not listening** – verified correct file locations, manually started the backend, and ensured PM2 manages it properly.
-4. **Configuration gaps** – updated JWT secret, confirmed placeholder API keys are not needed because authentication is handled via Postiz’s OAuth flow.
-
-## Next steps
-1. **User action:** Open `http://localhost:4007` in a browser, sign up (or log in), navigate to **Settings → API**, and generate an API key.
-2. **Receive API key** from the user and add a Postiz MCP entry to `C:\Users\gaith\.config\opencode\opencode.json` pointing to `http://localhost:4007/api`.
-3. Verify OpenCode can communicate with the Postiz MCP and list connected social accounts.
-4. Guide the user through OAuth authentication for each desired platform within Postiz.
-5. Once all platforms are linked, confirm that posting from OpenCode works end‑to‑end.
+- **Next steps**: 
+  1. User should open `http://localhost:4007`, log in with `ziditun@gmail.com` / `ZidiPass123!`, and navigate to **Integrations**.  
+  2. Connect desired social platforms (TikTok, Facebook, YouTube, Instagram, etc.) via the browser OAuth flow.  
+  3. After connecting accounts, restart OpenCode to enable posting through the Postiz MCP.  
+  4. If the Postiz backend stops, restart it with `docker exec postiz pm2 restart backend`.
