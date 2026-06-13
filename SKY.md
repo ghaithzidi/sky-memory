@@ -56,18 +56,22 @@ SKY evolves through:
 
 ---
 # SKY MASTER MEMORY
-- **Worked on**: Assisted the user with retrieving and generating a Postiz API key. Navigated database tables, reset the user password, logged in via API, obtained a JWT token, and rotated the organization API key. Verified the key works when sent in the `Authorization` header. Configured the Postiz MCP server in `opencode.json` with the generated key.
+**What was worked on**  
+GaiTh helped the user set up Facebook integration for the Postiz platform. The user provided their Facebook App ID and App Secret, which GaiTh added to the Postiz Docker configuration and restarted the container.  
 
-- **Decisions made**: Reset the password to a known value (`ZidiPass123!`) to ensure login success. Chose to generate the API key through the `/user/api-key/rotate` endpoint rather than direct DB manipulation. Decided to store and use the organization‑level API key for public API calls, as this is what the middleware expects. Added the Postiz MCP configuration to the OpenCode project.
+**Decisions made**  
+- Use the Facebook App credentials supplied by the user (`App ID: 1641482033818398`, `App Secret: 289bab50fe0b70f499cc1e95963631d7`).  
+- Update `docker‑compose.yaml` with these credentials and restart the Postiz service.  
+- Instruct the user to add the exact redirect URI `http://localhost:4007/integrations/social/facebook` to the Facebook app’s “Valid OAuth Redirect URIs” and ensure the app is in Live mode.  
 
-- **Problems solved**: 
-  1. Backend crash and 502 errors were resolved by restarting the container.  
-  2. Inability to log in due to unknown password – password was reset.  
-  3. Missing API key – generated and verified a working key.  
-  4. Clarified that the public API requires the key in the `Authorization` header, not `x-api-key`.  
+**Problems solved**  
+- Initial failure to connect Facebook due to missing API credentials.  
+- Container restart and environment variable propagation verified.  
+- Identified mismatch in redirect URI as the remaining blocker.  
 
-- **Next steps**: 
-  1. User should open `http://localhost:4007`, log in with `ziditun@gmail.com` / `ZidiPass123!`, and navigate to **Integrations**.  
-  2. Connect desired social platforms (TikTok, Facebook, YouTube, Instagram, etc.) via the browser OAuth flow.  
-  3. After connecting accounts, restart OpenCode to enable posting through the Postiz MCP.  
-  4. If the Postiz backend stops, restart it with `docker exec postiz pm2 restart backend`.
+**Next steps**  
+1. User adds the required redirect URI in the Facebook Developer Dashboard (link provided).  
+2. User switches the Facebook app to Live mode if not already.  
+3. User returns to Postiz → Integrations and clicks “Connect” for Facebook again.  
+4. If connection succeeds, proceed to configure additional social platforms as needed.  
+5. Should any error persist, GaiTh will check Postiz logs and OAuth flow details for further troubleshooting.
