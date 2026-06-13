@@ -57,37 +57,29 @@ SKY evolves through:
 ---
 # SKY MASTER MEMORY
 
-**What was worked on**  
-- Removed the `mcp-market-weather` and `viraly` MCP entries from the user’s OpenCode configuration.  
-- Provided a detailed inventory of GaiTh’s skills, agents, and MCP servers, explaining how each is triggered.  
-- Researched and compiled an extensive list of free or low‑cost social‑media‑management MCP servers and related tools, focusing on compatibility with Claude Code, OpenCode, and other MCP‑compatible AI assistants.  
-- Compared the options, highlighted capabilities (posting, scheduling, analytics, multi‑platform support), licensing, required API keys, and installation steps.  
-- Identified the best candidates for the user’s needs, especially the open‑source **Postiz** solution and the quick‑setup **Upload‑Post** remote MCP.  
-- Reviewed the official Anthropic/ModelContextProtocol servers, the awesome‑mcp‑servers list, Smithery.ai registry, and numerous GitHub repos to ensure a thorough coverage of at least 10‑15 sources.  
-- Checked the existing OpenCode configuration (n8n‑mcp) and suggested how to extend it with social‑media nodes.  
-- Clarified that most platforms do not provide official MCP servers; community implementations are the primary route.  
+## What was worked on
+- Set up a self‑hosted social‑media management solution using **Postiz**.
+- Cloned the Postiz Docker‑Compose repository and prepared the environment (`C:\Users\gaith\postiz`).
+- Generated a secure JWT secret and updated `docker-compose.yaml`.
+- Started Docker Compose, troubleshooting large image downloads and container startup issues.
+- Diagnosed and resolved a 502 Bad Gateway error caused by the Postiz backend not being compiled/started correctly; restarted the backend via PM2 so the API is now listening on port 3000.
+- Verified that the full Postiz application is reachable at `http://localhost:4007` and that the API endpoint works.
 
-**Decisions made**  
-- Keep the configuration clean: weather and Viraly MCPs were removed.  
-- Recommend **Postiz** (self‑hosted, MIT/AGPL, 31.9k stars) as the primary multi‑platform free MCP because it offers posting, scheduling, analytics, and AI content generation for 14+ platforms.  
-- Offer **Upload‑Post** as an immediate remote MCP alternative (free tier, 13 platforms, ready‑to‑paste OpenCode config).  
-- Suggest leveraging the already‑installed `n8n‑mcp` with the `n8n-nodes-social` package for workflow‑based automation.  
-- Advise using the open‑source **LinkedIn MCP Server** for LinkedIn (browser‑session based, no API keys) and **Reddit MCP Buddy** for read‑only Reddit access.  
-- Highlight that true “no‑API‑key” posting is only possible with self‑hosted solutions like Postiz; otherwise, platform OAuth credentials are required.  
+## Decisions made
+- Chose **Postiz** as the MCP because it is fully free, open‑source (AGPL‑3.0), and supports 14+ social platforms via browser OAuth—no paid API keys required.
+- Removed the `viraly` and `mcp-market-weather` MCP entries from `opencode.json` since they required paid plans or non‑existent packages.
+- Decided to keep the Docker‑Compose approach (pre‑built images) and fix the backend startup rather than rebuilding the image from source.
+- Agreed to let the user create a Postiz account manually in the browser and generate an API key, then provide that key for OpenCode MCP configuration.
 
-**Problems solved**  
-- Cleaned up unwanted MCP entries.  
-- Clarified how skills, agents, and MCPs are triggered (automatic for skills, dispatched for agents, auto‑called for MCPs).  
-- Resolved the user’s confusion about the cost of the Viraly service and removed it.  
-- Provided a comprehensive, source‑backed comparison of free social‑media MCP servers, addressing the user’s request for a deep, multi‑source research report.  
-- Answered the user’s specific capability questions (TikTok Shorts, Facebook images, YouTube video uploads, Instagram posts) with concrete information about Postiz’s support.  
+## Problems solved
+1. **Docker image download timeouts** – waited for full download and ensured Docker Desktop was running.
+2. **502 Bad Gateway** – traced to the NestJS backend not starting; discovered missing/incorrect `dist` path, restarted the PM2 process, and confirmed the backend now listens on port 3000.
+3. **Backend not listening** – verified correct file locations, manually started the backend, and ensured PM2 manages it properly.
+4. **Configuration gaps** – updated JWT secret, confirmed placeholder API keys are not needed because authentication is handled via Postiz’s OAuth flow.
 
-**Next steps**  
-1. **Configuration** – Add the chosen MCP to `opencode.json` (e.g., the Upload‑Post remote MCP block or the Postiz local Docker setup).  
-2. **Authentication** – Guide the user through the one‑time OAuth connections for each platform within Postiz (no manual API keys needed).  
-3. **Workflow integration** – Install `n8n-nodes-social` into the existing n8n instance and create starter workflows (RSS → multi‑platform post, content‑calendar → schedule).  
-4. **Skill augmentation** – Optionally install the OpenCode `skill/social/` directory to give GaiTh strategic content‑creation abilities that pair with the MCP.  
-5. **Testing** – Perform a test post to each desired platform via the MCP to confirm connectivity and permissions.  
-6. **Monitoring** – Set up a simple n8n or OpenCode monitoring workflow to alert GaiTh of any rate‑limit or authentication issues.  
-
-These actions will give the user a fully functional, free‑as‑possible social‑media management stack that GaiTh can control entirely from natural‑language prompts.
+## Next steps
+1. **User action:** Open `http://localhost:4007` in a browser, sign up (or log in), navigate to **Settings → API**, and generate an API key.
+2. **Receive API key** from the user and add a Postiz MCP entry to `C:\Users\gaith\.config\opencode\opencode.json` pointing to `http://localhost:4007/api`.
+3. Verify OpenCode can communicate with the Postiz MCP and list connected social accounts.
+4. Guide the user through OAuth authentication for each desired platform within Postiz.
+5. Once all platforms are linked, confirm that posting from OpenCode works end‑to‑end.
