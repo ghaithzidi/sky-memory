@@ -56,22 +56,27 @@ SKY evolves through:
 
 ---
 # SKY MASTER MEMORY
+
 **What was worked on**  
-GaiTh helped the user set up Facebook integration for the Postiz platform. The user provided their Facebook App ID and App Secret, which GaiTh added to the Postiz Docker configuration and restarted the container.  
+- Discussed connecting social media platforms (Facebook, TikTok, Instagram, YouTube) via the Postiz MCP.  
+- User became frustrated with the mandatory OAuth flow and decided to remove Postiz entirely.  
+- Cleaned up the environment: stopped and removed Postiz Docker containers, deleted the Postiz repository, and removed its MCP entry from `opencode.json`.  
+- Provided a comprehensive list of available skills, agents, and MCP servers in the system.  
+- Explored n8n‑compatible nodes and templates that can handle Facebook, TikTok, Instagram, and YouTube (BulkPublish, PostFast, Zernio, plus official core nodes).  
+- Clarified that the n8n nodes themselves are free/open‑source, but they rely on external SaaS services that typically require paid subscriptions, which the user found unacceptable.  
 
 **Decisions made**  
-- Use the Facebook App credentials supplied by the user (`App ID: 1641482033818398`, `App Secret: 289bab50fe0b70f499cc1e95963631d7`).  
-- Update `docker‑compose.yaml` with these credentials and restart the Postiz service.  
-- Instruct the user to add the exact redirect URI `http://localhost:4007/integrations/social/facebook` to the Facebook app’s “Valid OAuth Redirect URIs” and ensure the app is in Live mode.  
+- Postiz MCP was fully removed at the user’s request.  
+- Agreed to focus on n8n as the integration platform for social media automation.  
+- Identified the need for a truly free solution, steering away from third‑party SaaS nodes that demand monthly fees.  
 
 **Problems solved**  
-- Initial failure to connect Facebook due to missing API credentials.  
-- Container restart and environment variable propagation verified.  
-- Identified mismatch in redirect URI as the remaining blocker.  
+- Successfully cleaned the workspace of all Postiz artifacts, leaving a clean OpenCode configuration.  
+- Delivered an up‑to‑date inventory of skills, agents, and MCP servers.  
+- Provided clear information on the cost structure of available n8n social‑media nodes, helping the user understand why they are not completely free.  
 
 **Next steps**  
-1. User adds the required redirect URI in the Facebook Developer Dashboard (link provided).  
-2. User switches the Facebook app to Live mode if not already.  
-3. User returns to Postiz → Integrations and clicks “Connect” for Facebook again.  
-4. If connection succeeds, proceed to configure additional social platforms as needed.  
-5. Should any error persist, GaiTh will check Postiz logs and OAuth flow details for further troubleshooting.
+1. Investigate pure‑API approaches that can be used directly in n8n (e.g., Facebook Graph API, Instagram Basic Display API, YouTube Data API) without relying on paid third‑party services.  
+2. Research any community‑built TikTok nodes or HTTP‑request workflows that can work with TikTok’s public API or unofficial endpoints, aiming for a free implementation.  
+3. If a completely free solution proves infeasible, propose an alternative low‑cost stack (e.g., self‑hosted open‑source tools) and outline the required setup steps.  
+4. Await the user’s direction on which path to pursue or any additional requirements.
