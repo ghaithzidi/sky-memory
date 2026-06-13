@@ -57,22 +57,33 @@ SKY evolves through:
 ---
 # SKY MASTER MEMORY
 
-**What was worked on**  
-- Added three completely free MCP servers (MCP Market, Google Chrome DevTools MCP, Playwright MCP) to the `opencode.json` configuration.  
-- Updated the configuration file, validated the JSON, and confirmed Chrome is installed on the machine.  
-- Confirmed the total number of MCP servers is now 26, with the three new free ones included.  
+## Recent Work
+- Added three free MCP servers (MCP Market, Chrome DevTools MCP, Playwright MCP) to `opencode.json`, bringing the total to 26.
+- Installed a suite of ready‑made skills and agents: Superpowers plugin, GSD v1.38.5, osmontero/opencode‑skills, and opencode‑power‑pack, resulting in ~37 skills, 33 agents, and 88 GSD commands.
+- Created supporting files: `AGENTS.md`, `AUTOMATION.md`, custom Memory MCP server, and updated documentation.
+- Researched and presented free MCP servers for image generation, video generation, and web design.
+- Curated a trimmed “best of the best” MCP list, reducing the count from 26 to a focused set.
+- Evaluated free social‑media MCP options; compared Viraly (includes AI image generation) with Postiz and recommended Viraly for its all‑in‑one capabilities.
+- User approved switching to Viraly; removed 17 niche MCP Market servers, kept Weather and Crypto, and added Viraly to the configuration.
+- Updated `opencode.json` to reflect the new MCP lineup (now 8 servers) and revised `AUTOMATION.md` accordingly.
+- Validated the final JSON configuration and confirmed it is syntactically correct.
 
-**Decisions made**  
-- Only the 100 % free MCP servers were installed, per the user’s request.  
-- No API keys or additional credentials were required for these services.  
-- The changes were applied directly to the existing `opencode.json` file rather than creating a new config.  
+## Decisions Made
+1. **Skill Acquisition** – Chose to download existing skill packs (Superpowers, GSD, community packs) rather than building from scratch.
+2. **MCP Selection** – Kept core infrastructure (MCP_DOCKER, GitHub), browser tools (Chrome DevTools, Playwright), automation (n8n‑mcp), daily assistants (Weather, Crypto), and added Viraly for social‑media management with built‑in AI image generation.
+3. **Trimming Strategy** – Removed 17 low‑usage MCP Market servers to simplify the environment.
+4. **Social Media Manager** – Selected Viraly over Postiz because it provides both social‑media management and AI image generation in a single free MCP.
+5. **Documentation Updates** – Adjusted `AUTOMATION.md` and related docs to match the new MCP configuration.
 
-**Problems solved**  
-- Determined which of the listed MCP servers are truly free and filtered out the paid or freemium options.  
-- Ensured the JSON syntax remained valid after inserting the new entries.  
-- Verified that Google Chrome is present on the system, a prerequisite for the Chrome DevTools MCP.  
+## Problems Solved
+- Integrated a large number of free MCP servers while maintaining a valid JSON config.
+- Resolved conflicts between Docker‑isolated MCP tools and local file access by switching to local Puppeteer where needed.
+- Consolidated redundant browser automation tools and eliminated niche MCP Market entries to reduce overhead.
+- Provided a clear comparison between social‑media MCP options, leading to a single, comprehensive solution (Viraly).
 
-**Next steps**  
-- Restart OpenCode (or the surrounding application) so the newly added MCP servers become active.  
-- After the restart, the user can start using the free tools: weather, crypto, Wikipedia, browser control via Chrome DevTools, and web automation via Playwright.  
-- Monitor for any runtime errors after the restart and adjust the `opencode.json` if needed.  
+## Next Steps
+1. **Restart OpenCode** to load the updated `opencode.json` with the new 8 MCP servers.
+2. **OAuth Connect** social accounts in Viraly when prompted, enabling full A‑to‑Z social‑media management.
+3. Test the Memory MCP server to ensure storage and retrieval work as expected.
+4. Verify that Chrome DevTools and Playwright MCPs operate correctly after the restart.
+5. Begin using Viraly for posting, scheduling, and AI‑generated image creation across supported platforms.
