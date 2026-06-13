@@ -57,26 +57,25 @@ SKY evolves through:
 ---
 # SKY MASTER MEMORY
 
-**What was worked on**  
-- Discussed connecting social media platforms (Facebook, TikTok, Instagram, YouTube) via the Postiz MCP.  
-- User became frustrated with the mandatory OAuth flow and decided to remove Postiz entirely.  
-- Cleaned up the environment: stopped and removed Postiz Docker containers, deleted the Postiz repository, and removed its MCP entry from `opencode.json`.  
-- Provided a comprehensive list of available skills, agents, and MCP servers in the system.  
-- Explored n8n‑compatible nodes and templates that can handle Facebook, TikTok, Instagram, and YouTube (BulkPublish, PostFast, Zernio, plus official core nodes).  
-- Clarified that the n8n nodes themselves are free/open‑source, but they rely on external SaaS services that typically require paid subscriptions, which the user found unacceptable.  
+## What was worked on
+- Discussed building a custom social‑media management agent in n8n, covering possible architectures (AI Agent + HTTP requests, AI Agent + official n8n nodes, hybrid with BulkPublish) and recommended starting with Approach 1.
+- User decided to drop the n8n agent idea.
+- User then requested a **full audit of the OpenCode desktop application and the OpenCode CLI**, with a summary report only and no actions taken.
 
-**Decisions made**  
-- Postiz MCP was fully removed at the user’s request.  
-- Agreed to focus on n8n as the integration platform for social media automation.  
-- Identified the need for a truly free solution, steering away from third‑party SaaS nodes that demand monthly fees.  
+## Decisions made
+- The n8n agent project was abandoned per the user’s “forget about it” instruction.
+- The current focus is to perform a comprehensive, non‑intrusive audit of OpenCode (desktop and CLI) and deliver a concise summary report.
 
-**Problems solved**  
-- Successfully cleaned the workspace of all Postiz artifacts, leaving a clean OpenCode configuration.  
-- Delivered an up‑to‑date inventory of skills, agents, and MCP servers.  
-- Provided clear information on the cost structure of available n8n social‑media nodes, helping the user understand why they are not completely free.  
+## Problems solved / identified
+- Clarified the user’s shift in priorities from n8n to OpenCode.
+- Recognized that the OpenCode source is not present in the current workspace, so the audit will require locating the installation directories or repositories (e.g., checking typical install paths, environment variables, or asking the user for the location).
 
-**Next steps**  
-1. Investigate pure‑API approaches that can be used directly in n8n (e.g., Facebook Graph API, Instagram Basic Display API, YouTube Data API) without relying on paid third‑party services.  
-2. Research any community‑built TikTok nodes or HTTP‑request workflows that can work with TikTok’s public API or unofficial endpoints, aiming for a free implementation.  
-3. If a completely free solution proves infeasible, propose an alternative low‑cost stack (e.g., self‑hosted open‑source tools) and outline the required setup steps.  
-4. Await the user’s direction on which path to pursue or any additional requirements.
+## Next steps
+1. Locate the OpenCode desktop app and CLI installations (check common paths, environment variables, or request the exact locations from the user).
+2. Review the codebases for:
+   - Architecture and design patterns
+   - Dependency usage and versioning
+   - Security considerations (auth, data handling, permissions)
+   - Performance bottlenecks
+   - Documentation and test coverage
+3. Compile findings into a clear, structured summary report covering strengths, weaknesses, and any recommendations—**without making any changes** to the code or environment.
