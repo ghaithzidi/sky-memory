@@ -58,24 +58,31 @@ SKY evolves through:
 # SKY MASTER MEMORY
 
 ## What was worked on
-- Discussed building a custom social‑media management agent in n8n, covering possible architectures (AI Agent + HTTP requests, AI Agent + official n8n nodes, hybrid with BulkPublish) and recommended starting with Approach 1.
-- User decided to drop the n8n agent idea.
-- User then requested a **full audit of the OpenCode desktop application and the OpenCode CLI**, with a summary report only and no actions taken.
+- Investigated the OpenCode desktop application’s local storage and its synchronization mechanism with GitHub.
+- Identified the location of desktop app data (`%APPDATA%\ai.opencode.desktop\`) and the GitHub repository used for session sync (`ghaithzidi/sky-vault`).
+- Retrieved and reviewed historical desktop sessions from the GitHub repo (June 10‑11), summarizing their content (model comparisons, SKY Phase 0‑3 planning, audit steps, SSH debugging, RAG layer implementation).
+- Determined that today’s (June 13) desktop sessions are still stored locally in binary `.dat` files and have not yet been pushed to GitHub.
+- Clarified the GitHub accounts and tokens involved:
+  - The GitHub MCP used by the OpenCode CLI is authenticated with a personal access token belonging to **`ghaithzidi`**.
+  - The desktop app syncs sessions to the same GitHub account (`ghaithzidi/sky-vault`).
+  - An n8n “SKY Memory Agent” also pushes memory updates to a separate repo (`ghaithzidi/sky-memory`) using the **same** PAT, so no second GitHub account is involved.
+- Provided a concise mapping of all components (MCP, desktop sync, n8n agent, Cloudflare memory proxy) to their authentication sources.
 
 ## Decisions made
-- The n8n agent project was abandoned per the user’s “forget about it” instruction.
-- The current focus is to perform a comprehensive, non‑intrusive audit of OpenCode (desktop and CLI) and deliver a concise summary report.
+- Confirmed that all GitHub interactions (CLI MCP, desktop sync, n8n agent) use the single GitHub account **`ghaithzidi`**.
+- Decided that the user’s concern about mixed accounts is resolved: there is only one GitHub account in use across all parts of the system.
+- Chose to keep the Cloudflare memory proxy separate from GitHub; it is not tied to any GitHub account.
 
-## Problems solved / identified
-- Clarified the user’s shift in priorities from n8n to OpenCode.
-- Recognized that the OpenCode source is not present in the current workspace, so the audit will require locating the installation directories or repositories (e.g., checking typical install paths, environment variables, or asking the user for the location).
+## Problems solved
+- Resolved confusion about which GitHub account was being used by different parts of the OpenCode ecosystem.
+- Determined why today’s desktop session content could not be displayed: it resides in a binary LevelDB/LMDB file and has not been synced to GitHub yet.
+- Extracted and summarized historical session data from the GitHub‑hosted `sky-vault` repository, providing the user with concrete context from previous work.
 
 ## Next steps
-1. Locate the OpenCode desktop app and CLI installations (check common paths, environment variables, or request the exact locations from the user).
-2. Review the codebases for:
-   - Architecture and design patterns
-   - Dependency usage and versioning
-   - Security considerations (auth, data handling, permissions)
-   - Performance bottlenecks
-   - Documentation and test coverage
-3. Compile findings into a clear, structured summary report covering strengths, weaknesses, and any recommendations—**without making any changes** to the code or environment.
+1. **Sync today’s desktop sessions**: Close or archive the active sessions in the OpenCode desktop app so that the `.dat` data is pushed to `ghaithzidi/sky-vault`. Once synced, retrieve and summarize the latest conversation.
+2. **If immediate access is needed**, ask the user to manually export or copy the relevant session text from the desktop app and provide it for inclusion in the Sky Master Memory.
+3. **Document the GitHub repository audit** (as requested) by running `git remote -v`, `git status`, and `git remote show origin` in each local SKY project repository and reporting the results. This will require the user to point the CLI to the correct local repository paths.
+4. **Maintain a clear inventory** of all repositories involved in the SKY ecosystem:
+   - `ghaithzidi/sky-vault` – desktop session sync.
+   - `ghaithzidi/sky-memory` – n8n memory‑agent pushes.
+   - Any local project repos the user works on (to be identified when the audit is performed).
