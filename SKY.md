@@ -56,21 +56,38 @@ SKY evolves through:
 
 ---
 # SKY MASTER MEMORY
+
 **What was worked on**  
-GaiTh assisted the user with activating MCP (Modular Cloud Platform) servers in their OpenCode environment. The focus was on diagnosing why several servers (MCP_DOCKER, github, mcp‑market‑weather, viraly) could not be activated.
+- Removed the `mcp-market-weather` and `viraly` MCP entries from the user’s OpenCode configuration.  
+- Provided a detailed inventory of GaiTh’s skills, agents, and MCP servers, explaining how each is triggered.  
+- Researched and compiled an extensive list of free or low‑cost social‑media‑management MCP servers and related tools, focusing on compatibility with Claude Code, OpenCode, and other MCP‑compatible AI assistants.  
+- Compared the options, highlighted capabilities (posting, scheduling, analytics, multi‑platform support), licensing, required API keys, and installation steps.  
+- Identified the best candidates for the user’s needs, especially the open‑source **Postiz** solution and the quick‑setup **Upload‑Post** remote MCP.  
+- Reviewed the official Anthropic/ModelContextProtocol servers, the awesome‑mcp‑servers list, Smithery.ai registry, and numerous GitHub repos to ensure a thorough coverage of at least 10‑15 sources.  
+- Checked the existing OpenCode configuration (n8n‑mcp) and suggested how to extend it with social‑media nodes.  
+- Clarified that most platforms do not provide official MCP servers; community implementations are the primary route.  
 
 **Decisions made**  
-- Identified that Docker Desktop was installed but the Docker daemon was not running, which blocked Docker‑based MCP servers.  
-- Determined that the `@mcp-mk/weather` package referenced by the mcp‑market‑weather server does not exist on npm, requiring a replacement.  
-- Recognized that the viraly server requires the user to complete an OAuth authentication step before it can be activated.  
+- Keep the configuration clean: weather and Viraly MCPs were removed.  
+- Recommend **Postiz** (self‑hosted, MIT/AGPL, 31.9k stars) as the primary multi‑platform free MCP because it offers posting, scheduling, analytics, and AI content generation for 14+ platforms.  
+- Offer **Upload‑Post** as an immediate remote MCP alternative (free tier, 13 platforms, ready‑to‑paste OpenCode config).  
+- Suggest leveraging the already‑installed `n8n‑mcp` with the `n8n-nodes-social` package for workflow‑based automation.  
+- Advise using the open‑source **LinkedIn MCP Server** for LinkedIn (browser‑session based, no API keys) and **Reddit MCP Buddy** for read‑only Reddit access.  
+- Highlight that true “no‑API‑key” posting is only possible with self‑hosted solutions like Postiz; otherwise, platform OAuth credentials are required.  
 
 **Problems solved**  
-- Confirmed the root cause of the Docker‑related failures and initiated the start of Docker Desktop.  
-- Located alternative, valid weather MCP packages to replace the missing `@mcp-mk/weather`.  
-- Clarified the authentication requirement for the viraly server and instructed the user on how to complete it.
+- Cleaned up unwanted MCP entries.  
+- Clarified how skills, agents, and MCPs are triggered (automatic for skills, dispatched for agents, auto‑called for MCPs).  
+- Resolved the user’s confusion about the cost of the Viraly service and removed it.  
+- Provided a comprehensive, source‑backed comparison of free social‑media MCP servers, addressing the user’s request for a deep, multi‑source research report.  
+- Answered the user’s specific capability questions (TikTok Shorts, Facebook images, YouTube video uploads, Instagram posts) with concrete information about Postiz’s support.  
 
 **Next steps**  
-1. Ensure Docker Desktop fully starts and the daemon becomes responsive; then restart OpenCode to re‑attempt activation of Docker‑based servers.  
-2. Replace the broken weather server configuration with a working weather MCP package (e.g., a verified npm package) and verify its activation.  
-3. Guide the user through the OAuth flow for the viraly server, confirming successful authentication.  
-4. After the above actions, have the user test each server again and report any remaining issues for further troubleshooting.
+1. **Configuration** – Add the chosen MCP to `opencode.json` (e.g., the Upload‑Post remote MCP block or the Postiz local Docker setup).  
+2. **Authentication** – Guide the user through the one‑time OAuth connections for each platform within Postiz (no manual API keys needed).  
+3. **Workflow integration** – Install `n8n-nodes-social` into the existing n8n instance and create starter workflows (RSS → multi‑platform post, content‑calendar → schedule).  
+4. **Skill augmentation** – Optionally install the OpenCode `skill/social/` directory to give GaiTh strategic content‑creation abilities that pair with the MCP.  
+5. **Testing** – Perform a test post to each desired platform via the MCP to confirm connectivity and permissions.  
+6. **Monitoring** – Set up a simple n8n or OpenCode monitoring workflow to alert GaiTh of any rate‑limit or authentication issues.  
+
+These actions will give the user a fully functional, free‑as‑possible social‑media management stack that GaiTh can control entirely from natural‑language prompts.
