@@ -57,37 +57,25 @@ SKY evolves through:
 ---
 # SKY MASTER MEMORY
 
-## What was worked on
-- Added subdomain detection with fallback to the first active storefront in `src/app/api/reports/sales/route.ts`.
-- Updated `storeUrl` construction to correctly include the subdomain (`http://${subdomain}.${host}`) or default to host only.
-- Fixed a missing closing brace in `prisma/seed.ts` and ensured the file ends with a proper newline.
-- Synchronized the Prisma schema with the database using `npx prisma db push --accept-data-loss`, which created the missing `RolePermission` table.
-- Ran the seed script to populate initial data (governorates, shipping companies, admin user, role permissions, and the `itech` storefront).
-- Started the Next.js development server for testing.
-- Began implementation of a Git health monitoring system for the `sky-core` service:
-  - Designed a lightweight `GitHealthCollector` to gather metrics (`sky_git_dirty_files`, `sky_git_last_commit_age_hours`, `sky_git_behind_commits`, `sky_vault_file_count`).
-  - Integrated the collector into the existing `sky-core` service to run every 5 minutes without creating a new daemon.
-  - Added Prometheus metric definitions and ensured they are exposed via the existing scrape endpoint.
-  - Created Grafana panel definitions and alert rules (critical and warning thresholds).
-  - Performed debugging of the collector (fixed branch detection, corrected behind‑commits calculation).
+**What was worked on**  
+GaiTh focused on implementing Git health monitoring within the existing `sky-core` service. The work involved creating a new collector (`git_collector.py`) that gathers four metrics (dirty files, last commit age, behind‑commit count, vault file count) and exposing them via the Prometheus endpoint. The collector was integrated into the FastAPI application lifecycle, running as a background thread every five minutes. GaiTh also set up SSH key authentication, installed `paramiko` for remote operations, and verified that the collector produced correct output. After confirming metric exposure, attention turned to adding Grafana dashboard panels and Prometheus alert rules, locating the appropriate provisioning directories, and preparing JSON/dashboard files and alert rule files for deployment.
 
-## Decisions made
-- Use the `X-Subdomain` header set by middleware; if absent, query the first active storefront for a fallback subdomain.
-- Build `storeUrl` with the detected subdomain to ensure dashboard links point to the correct storefront.
-- Prefer `prisma db push` over a new migration to quickly sync the missing `RolePermission` table in the development DB.
-- Implement Git health monitoring as an internal scheduled task within `sky-core` rather than a separate daemon, following existing architecture patterns.
-- Use HTTP scheme for URL construction in development, but note the need to switch to the request’s protocol for production.
+**Decisions made**  
+- Use password‑less SSH with `paramiko` for remote file transfers and command execution.  
+- Integrate the collector as a FastAPI lifespan background thread rather than a separate daemon, keeping the architecture simple and consistent with existing services.  
+- Determine the upstream branch dynamically with `git rev-parse @{u}` to avoid ambiguous revision errors when calculating behind‑commit counts.  
+- Store Grafana dashboards in `/var/lib/grafana/dashboards` and Prometheus alert rules in `/etc/prometheus/rules`, following the server’s provisioning layout.  
 
-## Problems solved
-- Dashboard store links were incorrect because `storeUrl` lacked subdomain handling.
-- Seed script failed with “table `RolePermission` does not exist” due to unsynced schema.
-- `prisma/seed.ts` had a missing closing brace, causing a syntax error.
-- Git health collector initially returned incorrect behind‑commit values due to improper branch name handling; fixed with dynamic upstream detection.
+**Problems solved**  
+- Fixed the `sky_git_behind_commits` metric logic that previously failed due to an ambiguous HEAD reference.  
+- Resolved missing virtual environment activation by explicitly using the venv’s Python interpreter.  
+- Ensured all four Git health metrics are correctly exposed on the Prometheus scrape endpoint.  
+- Overcame permission issues when copying files to Grafana and Prometheus directories by using `sudo` where necessary.  
 
-## Next steps
-1. **Run integration tests** to verify that `storeUrl` is correctly generated for both admin and storefront requests.
-2. **Commit and push** the changes to the repository.
-3. **Validate Prometheus scraping** of the new Git health metrics and confirm they appear in Grafana.
-4. **Fine‑tune Grafana panels** and alert rule configurations as needed.
-5. **Add unit tests** for the `GitHealthCollector` to ensure metric accuracy.
-6. **Consider HTTPS handling** for `storeUrl` in production (use request protocol or `x-forwarded-proto` header).
+**Next steps**  
+1. Deploy the prepared Grafana dashboard JSON and alert rule files to the server’s provisioning folders.  
+2. Update `prometheus.yml` to include the new rule files and reload Prometheus.  
+3. Verify that Prometheus scrapes the new `sky_git_*` metrics and that Grafana displays the panels correctly.  
+4. Create automated tests for `GitHealthCollector` to ensure reliability.  
+5. Restart the `sky-core.service` to apply all changes and monitor logs for any issues.  
+6. Define alert thresholds (e.g., WARNING for >10 behind commits, CRITICAL for >50) and confirm alerts fire as expected.
